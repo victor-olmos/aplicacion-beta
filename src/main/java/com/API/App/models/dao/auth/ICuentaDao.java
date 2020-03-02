@@ -11,5 +11,9 @@ public interface ICuentaDao extends CrudRepository<Cuenta, Long> {
 	
 	public Cuenta findByEmail(String email);
 	
+	//////////////////CAMBIAR POR EMAIL ///////////////////////////////
+	
+	
+	
 
 }

@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,10 +58,12 @@ public class CuentaService implements ICuentaService , UserDetailsService {
 		return cuentaDao.findByEmail(email);
 	}
 
-	
-	
-	
-	
-	
+	@Override
+	@Transactional
+	public Cuenta save(Cuenta cuenta) {
+		return cuentaDao.save(cuenta);
+	}
+
+
 
 }

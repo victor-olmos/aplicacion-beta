@@ -7,4 +7,8 @@ public interface ICuentaService {
 	public Cuenta findByUsername(String username);
 	
 	public Cuenta findByEmail(String email);
+	
+	////////Registro/////////
+	
+	public Cuenta save(Cuenta cuenta);
 }
