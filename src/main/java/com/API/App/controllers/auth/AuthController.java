@@ -8,36 +8,35 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.dao.DataAccessException;
 
-import com.API.App.models.entity.auth.Cuenta;
-import com.API.App.models.services.auth.ICuentaService;
+import com.API.App.models.entity.Usuario;
+import com.API.App.models.services.auth.IAuthService;
 
 @RestController
 @RequestMapping("/api")
-public class CuentaController {
-	
+public class AuthController {
 	@Autowired
-	private ICuentaService cuentaService;
+	private IAuthService authService;
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 	
 	@PostMapping("/registro")
-	public ResponseEntity<?> create(@Valid @RequestBody Cuenta cuenta, BindingResult result) {
+	public ResponseEntity<?> create(@Valid @RequestBody Usuario usuario, BindingResult result) {
 		
-		Cuenta cuentaNew = null;
+		Usuario usuarioNew = null;
 		Map<String, Object> response = new HashMap<>();
 
-		cuenta.setPassword(passwordEncoder.encode(cuenta.getPassword()));
+		usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 		
 
 		if(result.hasErrors()) {
@@ -52,7 +51,7 @@ public class CuentaController {
 		}
 		
 		try {
-			cuentaNew = cuentaService.save(cuenta);
+			usuarioNew = authService.save(usuario);
 		} catch(DataAccessException e) {
 			response.put("mensaje", "Error al realizar el insert en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
@@ -60,7 +59,7 @@ public class CuentaController {
 		}
 		
 		response.put("mensaje", "La cuenta ha sido creado con éxito!");
-		response.put("cuenta", cuentaNew);
+		response.put("cuenta", usuarioNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 
